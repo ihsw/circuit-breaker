@@ -37,7 +37,7 @@ export default class {
       return;
     }
 
-    setTimeout(() => { this.counter--; }, this.decrementDuration);
+    setTimeout(() => this.counter--, this.decrementDuration);
   }
 
   reset() {
