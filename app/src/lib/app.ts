@@ -1,5 +1,20 @@
 import * as express from "express";
 
-export const app = express();
+import CircuitBreaker from "./circuit-breaker";
 
-app.get("/", (_, res) => res.send("Hello, world!"));
+export default (breaker: CircuitBreaker): express.Express => {
+  const app = express();
+
+  app.get("/", (_, res) => res.send("Hello, world!"));
+  app.get("/ping", (_, res) => {
+    if (breaker.isOpen === false) {
+      res.status(500);
+
+      return;
+    }
+
+    res.send("Pong");
+  });
+
+  return app;
+}
