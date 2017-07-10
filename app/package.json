@@ -5,7 +5,8 @@
   "main": "./dist/index.js",
   "scripts": {
     "test": "ava --verbose ./dist/test/*.js ./dist/test/**/*.js",
-    "build": "tsc && echo built"
+    "build": "tsc && echo built",
+    "ava": "ava --verbose"
   },
   "author": "",
   "license": "ISC",
