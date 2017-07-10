@@ -4,4 +4,7 @@ RUN mkdir -p /srv/app
 COPY ./app /srv/app
 WORKDIR /srv/app
 
-CMD ["bash"]
+RUN npm install -s \
+  && npm run -s build
+
+CMD ["node", "."]
