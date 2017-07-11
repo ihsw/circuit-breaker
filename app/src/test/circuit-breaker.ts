@@ -55,7 +55,7 @@ test("Circuit breaker should break and cool off", async (t) => {
   t.is(breaker.isOpen, false);
 });
 
-test("Circuit breaker should call maximum trip callback", async (t) => {
+test.only("Circuit breaker should call maximum trip callback", async (t) => {
   // setting up the circuit breaker params
   const upperThreshold = 5;
   const decrementDuration = 5000;
@@ -64,7 +64,7 @@ test("Circuit breaker should call maximum trip callback", async (t) => {
 
   return new Promise<void>((resolve, reject) => {
     // setting up a timeout for failure mode
-    const tId = setTimeout(() => reject(new Error("Test timeout!")), tripThreshold*cooloffDuration + 10);
+    const tId = setTimeout(() => reject(new Error("Test timeout!")), tripThreshold*cooloffDuration + 1000);
 
     // setting up a circuit breaker
     const breaker = new CircuitBreaker({
@@ -76,8 +76,14 @@ test("Circuit breaker should call maximum trip callback", async (t) => {
         // clearing the test rejection timeout
         clearTimeout(tId);
 
-        // validating that the breaker is now capped
+        // validating that the breaker is now capped and still open
         t.is(breaker.isCapped, true);
+        t.is(breaker.isOpen, true);
+
+        // resetting the cap
+        breaker.capReset();
+        t.is(breaker.isCapped, false);
+        t.is(breaker.isOpen, false);
 
         resolve();
       }
@@ -89,20 +95,22 @@ test("Circuit breaker should call maximum trip callback", async (t) => {
       t.is(breaker.isOpen, false);
 
       // tripping the breaker
-      for (let i = 0; i < upperThreshold+1; i++) {
+      for (let i = 0; i < upperThreshold; i++) {
         breaker.increment();
       }
+
+      // optionally halting when the breaker is capped
+      console.log("breaker.isCapped", breaker.isCapped);
+      if (breaker.isCapped) {
+        return;
+      }
+
+      // validating that the breaker is open
       t.is(breaker.isOpen, true);
 
-      // waiting for the breaker to cool off
+      // waiting for the breaker to cool off and tripping it again
       pause(cooloffDuration).then(() => {
         t.is(breaker.isOpen, false);
-
-        // checking if the breaker is capped before tripping it again
-        if (breaker.isCapped) {
-          return;
-        }
-
         tripBreaker();
       });
     };

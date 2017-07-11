@@ -41,15 +41,16 @@ export default class {
     this.counter++;
 
     // optionally opening the breaker
-    if (this.counter > this.upperThreshold) {
+    if (this.counter === this.upperThreshold) {
       this.isOpen = true;
 
       // incrementing the trip counter
       this.tripCounter++;
 
       // optionally capping the breaker
-      if (this.tripCounter > this.tripThreshold) {
+      if (this.tripCounter === this.tripThreshold) {
         this.isCapped = true;
+        console.log("this.isCapped", this.isCapped);
         this.onMaximumTrips();
 
         return;
@@ -69,7 +70,8 @@ export default class {
     this.isOpen = false;
   }
 
-  tripReset() {
+  capReset() {
+    this.reset();
     this.tripCounter = 0;
     this.isCapped = false;
   }
