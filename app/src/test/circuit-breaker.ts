@@ -1,8 +1,7 @@
 import { test } from "ava";
 
+import { pause } from "../lib/test-helper";
 import { default as CircuitBreaker } from "../lib/circuit-breaker";
-
-const pause = (delay: number): Promise<void> => new Promise<void>((resolve) => setTimeout(resolve, delay));
 
 test("Circuit breaker default values should be sane", async (t) => {
   const breaker = new CircuitBreaker({ cooloffPeriod: 0, decrementDuration: 0, upperThreshold: 0 });

@@ -7,13 +7,20 @@ export default (breaker: CircuitBreaker): express.Express => {
 
   app.get("/", (_, res) => res.send("Hello, world!"));
   app.get("/ping", (_, res) => {
-    if (breaker.isOpen === false) {
-      res.status(500);
+    if (breaker.isOpen === true) {
+      res.status(500).send("Pong");
 
       return;
     }
 
     res.send("Pong");
+  });
+  app.post("/trip-breaker", (_, res) => {
+    for (let i = 0; i < breaker.upperThreshold; i++) {
+      breaker.increment();
+    }
+
+    res.send();
   });
 
   return app;
