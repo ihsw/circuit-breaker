@@ -17,7 +17,7 @@ const setup = (): ISetupSettings => {
   const breaker = new CircuitBreaker({
     decrementDuration: 5*1000,
     upperThreshold: 5,
-    cooloffPeriod: 5*1000
+    cooloffDuration: 5*1000
   });
   const app = getApp(breaker);
   return { app, breaker, request: supertest(app) };
