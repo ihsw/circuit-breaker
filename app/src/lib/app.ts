@@ -1,4 +1,5 @@
 import * as express from "express";
+import * as HttpStatus from "http-status";
 
 import CircuitBreaker from "./circuit-breaker";
 
@@ -8,7 +9,7 @@ export default (breaker: CircuitBreaker): express.Express => {
   app.get("/", (_, res) => res.send("Hello, world!"));
   app.get("/ping", (_, res) => {
     if (breaker.isOpen === true) {
-      res.status(500).send("Pong");
+      res.status(HttpStatus.INTERNAL_SERVER_ERROR).send("Pong");
 
       return;
     }
