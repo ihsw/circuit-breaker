@@ -28,7 +28,7 @@ test("Circuit breaker default values should increment and decrement over a given
   }
 
   // waiting for the breaker to drain out the counter
-  await pause(decrementDuration+10);
+  await pause(decrementDuration);
 
   // expecting the counter to be back to normal
   t.is(breaker.counter, 0);
@@ -52,6 +52,6 @@ test("Circuit breaker should break and cool off", async (t) => {
   t.is(breaker.isOpen, true);
 
   // waiting for the breaker to cool off
-  await pause(cooloffPeriod+10);
+  await pause(cooloffPeriod);
   t.is(breaker.isOpen, false);
 });
