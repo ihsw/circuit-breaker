@@ -55,7 +55,7 @@ test("Circuit breaker should break and cool off", async (t) => {
   t.is(breaker.isOpen, false);
 });
 
-test.only("Circuit breaker should call maximum trip callback", async (t) => {
+test("Circuit breaker should call maximum trip callback", async (t) => {
   // setting up the circuit breaker params
   const upperThreshold = 5;
   const decrementDuration = 5000;
