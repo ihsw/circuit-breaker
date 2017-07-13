@@ -20,7 +20,7 @@ test("Circuit breaker default values should increment and decrement over a given
   });
 
   // incrementing the breaker up
-  for (let i = 0; i < upperThreshold; i++) {
+  for (let i = 0; i < upperThreshold-1; i++) {
     breaker.increment();
     t.is(breaker.isOpen, false);
     t.is(breaker.counter, i+1);
@@ -45,7 +45,7 @@ test("Circuit breaker should break and cool off", async (t) => {
   });
 
   // incrementing the breaker up to trip it
-  for (let i = 0; i < upperThreshold+1; i++) {
+  for (let i = 0; i < upperThreshold; i++) {
     breaker.increment();
   }
   t.is(breaker.isOpen, true);
