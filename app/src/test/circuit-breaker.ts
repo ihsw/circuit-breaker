@@ -80,12 +80,15 @@ test.only("Circuit breaker should call maximum trip callback", async (t) => {
         t.is(breaker.isCapped, true);
         t.is(breaker.isOpen, true);
 
-        // resetting the cap
-        breaker.capReset();
-        t.is(breaker.isCapped, false);
-        t.is(breaker.isOpen, false);
+        // pausing momentarily to prevent race condition
+        pause(100).then(() => {
+          // resetting the cap
+          breaker.capReset();
+          t.is(breaker.isCapped, false);
+          t.is(breaker.isOpen, false);
 
-        resolve();
+          resolve();
+        });
       }
     });
 
@@ -100,7 +103,6 @@ test.only("Circuit breaker should call maximum trip callback", async (t) => {
       }
 
       // optionally halting when the breaker is capped
-      console.log("breaker.isCapped", breaker.isCapped);
       if (breaker.isCapped) {
         return;
       }

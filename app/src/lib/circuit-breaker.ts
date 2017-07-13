@@ -50,7 +50,6 @@ export default class {
       // optionally capping the breaker
       if (this.tripCounter === this.tripThreshold) {
         this.isCapped = true;
-        console.log("this.isCapped", this.isCapped);
         this.onMaximumTrips();
 
         return;
