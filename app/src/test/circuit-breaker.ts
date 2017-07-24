@@ -121,3 +121,30 @@ test("Circuit breaker should call maximum trip callback", async (t) => {
     tripBreaker();
   });
 });
+
+test("Circuit breaker should not continue decrementing after cooloff", async (t) => {
+  // setting up the circuit breaker
+  const upperThreshold = 5;
+  const decrementDuration = 5*1000;
+  const cooloffPeriod = 1*1000;
+  const breaker = new CircuitBreaker({
+    cooloffDuration: cooloffPeriod,
+    decrementDuration: decrementDuration,
+    upperThreshold: upperThreshold
+  });
+
+  // incrementing the breaker up to trip it
+  for (let i = 0; i < upperThreshold; i++) {
+    breaker.increment();
+  }
+  t.is(breaker.isOpen, true);
+
+  // waiting for the breaker to cool off
+  await pause(cooloffPeriod);
+  t.is(breaker.isOpen, false);
+  t.is(breaker.counter, 0);
+
+  // waiting for the decrement duration to finish and double checking the counter is not negative
+  await pause(decrementDuration - cooloffPeriod);
+  t.is(breaker.counter, 0, "Counter is at 0 after cooloff and decrement duration");
+});
