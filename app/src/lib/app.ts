@@ -17,7 +17,7 @@ export default (breaker: CircuitBreaker): express.Express => {
     res.send("Pong");
   });
   app.post("/trip-breaker", (_, res) => {
-    for (let i = 0; i < breaker.upperThreshold+1; i++) {
+    for (let i = 0; i < breaker.upperThreshold; i++) {
       breaker.increment();
     }
 
