@@ -66,14 +66,15 @@ export default class {
 
     // decrementing the counter accordingly
     const timerId = setTimeout(() => {
-      // optionally halting on this timer id being flagged as invalid
-      for (let i = 0; i < this.invalidTimeoutIds.length; i++) {
-        // halting and removing the entry from the list of invalid timeout ids
-        if (timerId === this.invalidTimeoutIds[i]) {
-          this.invalidTimeoutIds.splice(i, 1);
+      // removing the decrement timer id from the decrement timer id list
+      this.decrementTimeoutIds.splice(this.decrementTimeoutIds.indexOf(timerId), 1);
 
-          return;
-        }
+      // optionally halting on this timer id being flagged as invalid
+      const i = this.invalidTimeoutIds.indexOf(timerId);
+      if (i > -1) {
+        this.invalidTimeoutIds.splice(i, 1);
+
+        return;
       }
 
       this.counter--;

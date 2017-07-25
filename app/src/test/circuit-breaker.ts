@@ -148,3 +148,41 @@ test("Circuit breaker should not continue decrementing after cooloff", async (t)
   await pause(decrementDuration - cooloffPeriod);
   t.is(breaker.counter, 0, "Counter is at 0 after cooloff and decrement duration");
 });
+
+test("Circuit breaker should remove decrement timeout ids after decrementing", async (t) => {
+  // setting up the circuit breaker
+  const upperThreshold = 5;
+  const decrementDuration = 5*1000;
+  const breaker = new CircuitBreaker({
+    cooloffDuration: 1*1000,
+    decrementDuration: decrementDuration,
+    upperThreshold: 5
+  });
+
+  // incrementing the breaker up to trip it
+  for (let i = 0; i < upperThreshold-1; i++) {
+    breaker.increment();
+  }
+
+  await pause(decrementDuration);
+  t.is(breaker.decrementTimeoutIds.length, 0, "Decrement timeout id list should be empty");
+});
+
+test("Circuit breaker should remove invalid timeout ids after decrementing", async (t) => {
+  // setting up the circuit breaker
+  const upperThreshold = 5;
+  const decrementDuration = 5*1000;
+  const breaker = new CircuitBreaker({
+    cooloffDuration: 1*1000,
+    decrementDuration: decrementDuration,
+    upperThreshold: upperThreshold
+  });
+
+  // incrementing the breaker up to trip it
+  for (let i = 0; i < upperThreshold-1; i++) {
+    breaker.increment();
+  }
+
+  await pause(decrementDuration);
+  t.is(breaker.invalidTimeoutIds.length, 0, "Invalid timeout id list should be empty");
+});
