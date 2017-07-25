@@ -6,7 +6,7 @@
         "noUnusedParameters": true,
         "noUnusedLocals": true,
         "strictNullChecks": true,
-        "sourceMap": false,
+        "sourceMap": true,
         "removeComments": true,
         "declaration": false,
         "rootDir": "./src",
