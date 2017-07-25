@@ -8,7 +8,8 @@
     "test-coverage": "nyc --reporter=lcov --check-coverage --lines 95 --functions 95 --branches 95 npm test && nyc report",
     "build": "tsc && echo built",
     "ava": "ava --verbose",
-    "lint": "tslint ./src/**/*.ts && echo linted"
+    "lint": "tslint ./src/**/*.ts && echo linted",
+    "coveralls-coverage": "nyc report --reporter=text-lcov | coveralls"
   },
   "author": "",
   "license": "ISC",
@@ -21,6 +22,7 @@
     "@types/http-status": "^0.2.29",
     "@types/supertest": "^2.0.1",
     "ava": "^0.20.0",
+    "coveralls": "^2.13.1",
     "nyc": "^11.0.3",
     "supertest": "^3.0.0",
     "tslint": "^5.5.0",
