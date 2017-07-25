@@ -91,6 +91,10 @@ export default class {
   }
 
   reset() {
+    if (this.isOpen === false) {
+      throw new Error("Do not call reset on a closed breaker!");
+    }
+
     this.counter = 0;
     this.isOpen = false;
 
