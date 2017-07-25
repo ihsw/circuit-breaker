@@ -8,16 +8,16 @@ import getApp from "../lib/app";
 import CircuitBreaker from "../lib/circuit-breaker";
 
 interface ISetupSettings {
-  request: supertest.SuperTest<supertest.Test>,
-  breaker: CircuitBreaker,
-  app: express.Express
+  request: supertest.SuperTest<supertest.Test>;
+  breaker: CircuitBreaker;
+  app: express.Express;
 }
 
 const setup = (): ISetupSettings => {
   const breaker = new CircuitBreaker({
-    decrementDuration: 5*1000,
-    upperThreshold: 5,
-    cooloffDuration: 5*1000
+    cooloffDuration: 5 * 1000,
+    decrementDuration: 5 * 1000,
+    upperThreshold: 5
   });
   const app = getApp(breaker);
   return { app, breaker, request: supertest(app) };

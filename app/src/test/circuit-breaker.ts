@@ -12,18 +12,18 @@ test("Circuit breaker default values should be sane", async (t) => {
 test("Circuit breaker default values should increment and decrement over a given period", async (t) => {
   // setting up the circuit breaker
   const upperThreshold = 5;
-  const decrementDuration = 1*1000;
+  const decrementDuration = 1 * 1000;
   const breaker = new CircuitBreaker({
-    cooloffDuration: 5*1000,
+    cooloffDuration: 5 * 1000,
     decrementDuration: decrementDuration,
     upperThreshold: upperThreshold
   });
 
   // incrementing the breaker up
-  for (let i = 0; i < upperThreshold-1; i++) {
+  for (let i = 0; i < upperThreshold - 1; i++) {
     breaker.increment();
     t.is(breaker.isOpen, false);
-    t.is(breaker.counter, i+1);
+    t.is(breaker.counter, i + 1);
   }
 
   // waiting for the breaker to drain out the counter
@@ -36,8 +36,8 @@ test("Circuit breaker default values should increment and decrement over a given
 test("Circuit breaker should break and cool off", async (t) => {
   // setting up the circuit breaker
   const upperThreshold = 5;
-  const decrementDuration = 1*1000;
-  const cooloffPeriod = 5*1000;
+  const decrementDuration = 1 * 1000;
+  const cooloffPeriod = 5 * 1000;
   const breaker = new CircuitBreaker({
     cooloffDuration: cooloffPeriod,
     decrementDuration: decrementDuration,
@@ -64,14 +64,12 @@ test("Circuit breaker should call maximum trip callback", async (t) => {
 
   return new Promise<void>((resolve, reject) => {
     // setting up a timeout for failure mode
-    const tId = setTimeout(() => reject(new Error("Test timeout!")), tripThreshold*cooloffDuration + 1000);
+    const tId = setTimeout(() => reject(new Error("Test timeout!")), tripThreshold * cooloffDuration + 1000);
 
     // setting up a circuit breaker
     const breaker = new CircuitBreaker({
       cooloffDuration: cooloffDuration,
       decrementDuration: decrementDuration,
-      upperThreshold: upperThreshold,
-      tripThreshold: tripThreshold,
       onMaximumTrips: () => {
         // clearing the test rejection timeout
         clearTimeout(tId);
@@ -89,7 +87,9 @@ test("Circuit breaker should call maximum trip callback", async (t) => {
 
           resolve();
         });
-      }
+      },
+      tripThreshold: tripThreshold,
+      upperThreshold: upperThreshold
     });
 
     // creating a recursive func to trip the breaker sequentially
@@ -125,8 +125,8 @@ test("Circuit breaker should call maximum trip callback", async (t) => {
 test("Circuit breaker should not continue decrementing after cooloff", async (t) => {
   // setting up the circuit breaker
   const upperThreshold = 5;
-  const decrementDuration = 5*1000;
-  const cooloffPeriod = 1*1000;
+  const decrementDuration = 5 * 1000;
+  const cooloffPeriod = 1 * 1000;
   const breaker = new CircuitBreaker({
     cooloffDuration: cooloffPeriod,
     decrementDuration: decrementDuration,
@@ -152,15 +152,15 @@ test("Circuit breaker should not continue decrementing after cooloff", async (t)
 test("Circuit breaker should remove decrement timeout ids after decrementing", async (t) => {
   // setting up the circuit breaker
   const upperThreshold = 5;
-  const decrementDuration = 5*1000;
+  const decrementDuration = 5 * 1000;
   const breaker = new CircuitBreaker({
-    cooloffDuration: 1*1000,
+    cooloffDuration: 1 * 1000,
     decrementDuration: decrementDuration,
     upperThreshold: 5
   });
 
   // incrementing the breaker up to trip it
-  for (let i = 0; i < upperThreshold-1; i++) {
+  for (let i = 0; i < upperThreshold - 1; i++) {
     breaker.increment();
   }
 
@@ -171,15 +171,15 @@ test("Circuit breaker should remove decrement timeout ids after decrementing", a
 test("Circuit breaker should remove invalid timeout ids after decrementing", async (t) => {
   // setting up the circuit breaker
   const upperThreshold = 5;
-  const decrementDuration = 5*1000;
+  const decrementDuration = 5 * 1000;
   const breaker = new CircuitBreaker({
-    cooloffDuration: 1*1000,
+    cooloffDuration: 1 * 1000,
     decrementDuration: decrementDuration,
     upperThreshold: upperThreshold
   });
 
   // incrementing the breaker up to trip it
-  for (let i = 0; i < upperThreshold-1; i++) {
+  for (let i = 0; i < upperThreshold - 1; i++) {
     breaker.increment();
   }
 

@@ -25,4 +25,4 @@ export default (breaker: CircuitBreaker): express.Express => {
   });
 
   return app;
-}
+};
