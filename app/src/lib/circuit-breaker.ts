@@ -46,20 +46,7 @@ export default class {
 
     // optionally opening the breaker
     if (this.counter === this.upperThreshold) {
-      this.isOpen = true;
-
-      // incrementing the trip counter
-      this.tripCounter++;
-
-      // optionally capping the breaker
-      if (this.tripCounter === this.tripThreshold) {
-        this.isCapped = true;
-        this.onMaximumTrips();
-
-        return;
-      }
-
-      setTimeout(() => this.reset(), this.cooloffPeriod);
+      this.trip();
 
       return;
     }
@@ -80,6 +67,27 @@ export default class {
       this.counter--;
     }, this.decrementDuration);
     this.decrementTimeoutIds.push(timerId);
+  }
+
+  trip() {
+    if (this.isOpen) {
+      throw new Error("Do not call trip on an open breaker!");
+    }
+
+    this.isOpen = true;
+
+    // incrementing the trip counter
+    this.tripCounter++;
+
+    // optionally capping the breaker
+    if (this.tripCounter === this.tripThreshold) {
+      this.isCapped = true;
+      this.onMaximumTrips();
+
+      return;
+    }
+
+    setTimeout(() => this.reset(), this.cooloffPeriod);
   }
 
   reset() {
