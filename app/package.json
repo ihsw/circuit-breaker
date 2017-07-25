@@ -5,7 +5,7 @@
   "main": "./dist/index.js",
   "scripts": {
     "test": "ava --verbose ./dist/test/*.js ./dist/test/**/*.js",
-    "test-coverage": "nyc npm test",
+    "test-coverage": "nyc --check-coverage --lines 95 --functions 95 --branches 95 npm test",
     "build": "tsc && echo built",
     "ava": "ava --verbose"
   },
