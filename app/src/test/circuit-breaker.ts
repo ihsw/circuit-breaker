@@ -218,3 +218,18 @@ test("Circuit breaker should throw error when calling trip on an open breaker", 
     t.true(err instanceof Error);
   }
 });
+
+test("Circuit breaker should throw error when calling reset on a closed breaker", async (t) => {
+  // setting up the circuit breaker
+  const breaker = new CircuitBreaker({
+    cooloffDuration: 1 * 1000,
+    decrementDuration: 5 * 1000,
+    upperThreshold: 5
+  });
+
+  try {
+    breaker.reset();
+  } catch (err) {
+    t.true(err instanceof Error);
+  }
+});
