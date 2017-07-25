@@ -194,7 +194,7 @@ test("Circuit breaker should throw error when calling increment on an open break
     decrementDuration: 5 * 1000,
     upperThreshold: 5
   });
-  
+
   breaker.trip();
   try {
     breaker.increment();
@@ -210,7 +210,7 @@ test("Circuit breaker should throw error when calling trip on an open breaker", 
     decrementDuration: 5 * 1000,
     upperThreshold: 5
   });
-  
+
   breaker.trip();
   try {
     breaker.trip();
