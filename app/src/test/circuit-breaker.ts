@@ -186,3 +186,35 @@ test("Circuit breaker should remove invalid timeout ids after decrementing", asy
   await pause(decrementDuration);
   t.is(breaker.invalidTimeoutIds.length, 0, "Invalid timeout id list should be empty");
 });
+
+test("Circuit breaker should throw error when calling increment on an open breaker", async (t) => {
+  // setting up the circuit breaker
+  const breaker = new CircuitBreaker({
+    cooloffDuration: 1 * 1000,
+    decrementDuration: 5 * 1000,
+    upperThreshold: 5
+  });
+  
+  breaker.trip();
+  try {
+    breaker.increment();
+  } catch (err) {
+    t.true(err instanceof Error);
+  }
+});
+
+test("Circuit breaker should throw error when calling trip on an open breaker", async (t) => {
+  // setting up the circuit breaker
+  const breaker = new CircuitBreaker({
+    cooloffDuration: 1 * 1000,
+    decrementDuration: 5 * 1000,
+    upperThreshold: 5
+  });
+  
+  breaker.trip();
+  try {
+    breaker.trip();
+  } catch (err) {
+    t.true(err instanceof Error);
+  }
+});
