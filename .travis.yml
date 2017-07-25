@@ -1,0 +1,12 @@
+language: node_js
+node_js:
+- 8
+
+before_install:
+- cd ./app
+install:
+- npm install -s
+- npm run -s build
+script:
+- npm run -s lint
+- npm run -s test-coverage
